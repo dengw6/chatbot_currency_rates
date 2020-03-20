@@ -1,0 +1,110 @@
+def get_currency_rate(currency,date):
+  url="https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml"
+  #code in the block came from 4000CEM Week 1 codio tutorial
+  #the main feature is change the data of xml to element tree
+  import urllib.request
+  page = urllib.request.urlopen(url)
+  data_bytes = page.read()
+  data_string = data_bytes.decode('utf-8')
+  page.close()
+  import xml.etree.ElementTree as ET
+  data_tree = ET.fromstring(data_string)
+  #end of code
+  
+  def the_date_is_target_close(date):
+    TARGET=["2019-12-25","2019-12-26","2020-01-01","2020-04-10","2020-04-13","2020-05-01"]
+    for x in TARGET:
+      if date==x:
+        return True
+    return False
+  
+  def date_str_to_list(date):
+    date=date.split('-')
+    date[0]=int(date[0])
+    if date[1][0]=='0':
+      date[1]=int(date[1].replace('0',''))
+    else:
+      date[1]=int(date[1])
+    if date[2][0]=='0':
+      date[2]=int(date[2].replace('0',''))
+    else:
+      date[2]=int(date[2])
+    return date
+  
+  def the_date_is_weekend(date):
+    from datetime import datetime
+    date=date_str_to_list(date)
+    week_num=datetime(date[0],date[1],date[2]).strftime('%w')
+    if week_num=='0' or week_num=='6':
+      return True
+    return False
+  
+  from datetime import datetime
+  today=datetime.now().strftime("%Y-%m-%d")
+  if date>today:
+    return "Sorry, "+date+" is in future."
+  
+  from datetime import timedelta
+  last_date=data_tree[2][0].attrib['time']
+  last_list=date_str_to_list(last_date)
+  date_90_days_ago=(datetime(last_list[0],last_list[1],last_list[2])-timedelta(days=89)).strftime("%Y-%m-%d")
+  if date<date_90_days_ago:
+    return "Date: "+date+" is out of the 90 days storing range."
+  
+  def get_rate(currency,date):
+    for x in data_tree[2]:
+      if date==x.attrib["time"]:
+        for y in x:
+          if currency==y.attrib["currency"]:
+            return float(y.attrib["rate"])
+    return "The date was accessible but found no result."
+  
+  if date==today:
+    if the_date_is_target_close(date):
+      return "Sorry, today is Target Closing Day and the service is closed."
+    if the_date_is_weekend(date):
+      return "Sorry, services are closed on weekends."
+    if date != last_date:
+      return "Today's data is not updated yet, but normally it is updated around 4:00 p.m. Please feel free to check back."
+    return get_rate(currency,date)
+    
+  if the_date_is_target_close(date):
+    return date+" is a TARGET closing day."
+  
+  if the_date_is_weekend(date):
+    return date+" is not a weekday."
+  
+  return get_rate(currency,date)
+
+def date_str_to_list(date):
+  date=date.split('-')
+  date[0]=int(date[0])
+  if date[1][0]=='0':
+    date[1]=int(date[1].replace('0',''))
+  else:
+    date[1]=int(date[1])
+  if date[2][0]=='0':
+    date[2]=int(date[2].replace('0',''))
+  else:
+    date[2]=int(date[2])
+  return date
+
+#in the test version the first & last dates are setup, plz delete those lines while operating
+import matplotlib.pyplot as plt
+currency="USD"
+start_date="2020-03-01"
+end_date="2020-03-08"
+date_list=[]
+rate_list=[]
+from datetime import datetime, timedelta
+while start_date<=end_date:
+  result=get_currency_rate(currency,start_date)
+  if type(result)==float:
+    date_list.append(start_date)
+    rate_list.append(result)
+  adder_list=date_str_to_list(start_date)
+  start_date=(datetime(adder_list[0],adder_list[1],adder_list[2])+timedelta(days=1)).strftime("%Y-%m-%d")
+plt.plot(date_list,rate_list)
+plt.xlabel('dates')
+plt.ylabel('rates of '+currency)
+plt.show()
