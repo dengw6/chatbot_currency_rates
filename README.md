@@ -1,1 +1,13 @@
-# chatbot_currency_rates
+Next week, we distributed a personal task to each person. My part was to fetch the currency rates of given currency. After that, the group was out of order in general.
+
+But at first, let me talked about the problems I met and solved.
+At the beginning, I was faced with the issue of data resource. One of the reasons we picked currency bot was – a sample of fetched currency rates was right there in the python module. It could help us a lot when doing a project with brand goals and little experience. However, that data resource given in the module only provided the newest currency rates. What I wanted exactly was a data resource with historical data as well. To find it, I surfed on the Internet as a headless fly. The most exhausting news was – I found no result. While I was increasingly despondent, Robert sent me a message of the currency data. It sat right there, in the same website but another page. I felt so dumb when I found the truth but thanks Robert anyway. He saved me hours! Yeah! Team work! 
+
+When the data resource was found, I began to deal with the task of programming. To complete the task, I did further research in the field of element tree. After a few days of work, I believed it was finished. My cat believed it was finished. Even the code itself believed it was done. Then, on next week Monday, there came a new error. The chatbot thought data on Feb.23rd could not be found was due to the reason that it was not updated, which was not the truth. The reason in real world should be the data were only updated on weekdays (Feb.23rd was on Sunday). To solve this problem, I nearly rewrote the code. The complete efforts I made have been told on that next week presentation. Sorry I do not want to repeat it here but you could take a look at the whole code now.
+
+The last thing I did for the whole project was to draw the currency line graph of given period, where I used a new tool – the matplotlib.
+
+The end section is a analyse of why the 2nd project did not achieve the goal
+1.	Our group did not work as a team. We shared ideas but failed to come up with an executable plan. Some of us repeated the work other people have done.
+2.	Lack of programming experience. As I mentioned, in order to set up a reachable target, we made an unexciting arrangement. Despite that, we still met challenges with programming and found it difficult to overcome.
+3.	Need time arrangement and emotional adjustment.  Unlike the first few weeks, all the modules we attended were at the easy stage, we encountered exams and more complex lectures in the latter weeks. If we did not improve the efficiency, time would be squeezed from a module to another to fill the gap. In terms of emotional adjustment, we need more support to each other. It seems like the 1st reason.
